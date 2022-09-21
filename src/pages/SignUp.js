@@ -1,15 +1,20 @@
 import React, { useState } from 'react';
 import { AiFillEyeInvisible, AiFillEye } from 'react-icons/ai'
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import OAuth from '../components/OAuth';
+import { getAuth, createUserWithEmailAndPassword, updateProfile } from 'firebase/auth'
+import { db } from '../Firebase/Firebase'
+import { doc, serverTimestamp, setDoc } from 'firebase/firestore';
+import { toast } from 'react-toastify';
 
 const SignUp = () => {
-   const  [showPassword, setShowPassword] = useState(false)
+   const [showPassword, setShowPassword] = useState(false)
    const [data, setData] = useState({
       name: '',
       email: '',
       password: ''
    })
+   const navigate = useNavigate();
 
    const handleChange = (e) => {
       const name = e.target.name
@@ -19,16 +24,40 @@ const SignUp = () => {
       setData(prevData => ({ ...prevData, [name]: value }))
    }
 
-   const handleSubmit = (e) => {
+   const handleSubmit = async (e) => {
       e.preventDefault()
+      
+      try{
+         const auth = getAuth()
+         const userCredentials = await createUserWithEmailAndPassword(auth, data.email, data.password)
+         
+         updateProfile(auth.currentUser, {
+            displayName: data.name
+         })
+         const user = userCredentials.user
+         const formDataCopy = { ...data }
+         delete formDataCopy.password
 
-      setData('')
+         formDataCopy.timestamp = serverTimestamp();
+         await setDoc(doc(db, 'users', user.uid), formDataCopy)
+
+         setData({name: '', email: '', password: ''})
+         toast.success('Registration successful!!!')
+         navigate('/sign-in')
+      }
+      catch(err) {
+         toast.error(`Error: ${err.message}`)
+      }
+      
+
+      //setData('')
    }
 
    const handleClick = () => {
       setShowPassword(prevState => !prevState)
    }
 
+   
   return (
     <section>
       <h1 className='text-3xl text-center mt-6 font-bold'>Sign Up</h1>
@@ -41,7 +70,6 @@ const SignUp = () => {
             <input 
                   className='w-full px-4 py-2 text-xl text-gray-700 bg-white border-gray-300 rounded transition ease-in-out mb-6'
                   type="text"
-                  id='name' 
                   name='name'
                   placeholder='Full Name'
                   value={data.name}
@@ -49,8 +77,7 @@ const SignUp = () => {
                />
                <input 
                   className='w-full px-4 py-2 text-xl text-gray-700 bg-white border-gray-300 rounded transition ease-in-out mb-6'
-                  type="text"
-                  id='email' 
+                  type="email"
                   name='email'
                   placeholder='Enter Username'
                   value={data.email}
@@ -60,7 +87,6 @@ const SignUp = () => {
                   <input 
                      className='w-full px-4 py-2 text-xl text-gray-700 bg-white border-gray-300 rounded transition ease-in-out'
                      type={showPassword ? 'text': 'password'}
-                     id='password' 
                      name='password'
                      placeholder='Enter Password'
                      value={data.password}

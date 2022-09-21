@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { AiFillEyeInvisible, AiFillEye } from 'react-icons/ai'
-import { Link } from 'react-router-dom';
+import { Link, Navigate, useNavigate } from 'react-router-dom';
 import OAuth from '../components/OAuth';
 
 const SignIn = () => {
+   const navigate = useNavigate()
    const  [showPassword, setShowPassword] = useState(false)
    const [data, setData] = useState({
       email: '',
@@ -21,6 +22,7 @@ const SignIn = () => {
    const handleSubmit = (e) => {
       e.preventDefault()
 
+      navigate('/')
       setData('')
    }
 
@@ -42,7 +44,7 @@ const SignIn = () => {
                   type="text"
                   id='email' 
                   name='email'
-                  placeholder='Enter Username'
+                  placeholder='Enter Email'
                   value={data.email}
                   onChange={handleChange}
                />
