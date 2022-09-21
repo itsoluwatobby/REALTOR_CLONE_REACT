@@ -1,8 +1,8 @@
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const Header = () => {
    const location = useLocation();
-   const navigate = useNavigate()
+   const navigate = useNavigate();
 
    const pathMatchRoute = (route) => {
       if(route === location.pathname) return true
