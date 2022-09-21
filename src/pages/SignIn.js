@@ -53,8 +53,7 @@ const SignIn = () => {
             <form onSubmit={handleSubmit}>
                <input 
                   className='w-full px-4 py-2 text-xl text-gray-700 bg-white border-gray-300 rounded transition ease-in-out mb-6'
-                  type="text"
-                  id='email' 
+                  type="email"
                   name='email'
                   placeholder='Enter Email'
                   value={data.email}
@@ -64,7 +63,6 @@ const SignIn = () => {
                   <input 
                      className='w-full px-4 py-2 text-xl text-gray-700 bg-white border-gray-300 rounded transition ease-in-out'
                      type={showPassword ? 'text': 'password'}
-                     id='password' 
                      name='password'
                      placeholder='Enter Password'
                      value={data.password}

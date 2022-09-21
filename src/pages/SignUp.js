@@ -79,7 +79,7 @@ const SignUp = () => {
                   className='w-full px-4 py-2 text-xl text-gray-700 bg-white border-gray-300 rounded transition ease-in-out mb-6'
                   type="email"
                   name='email'
-                  placeholder='Enter Username'
+                  placeholder='Enter Email'
                   value={data.email}
                   onChange={handleChange}
                />
