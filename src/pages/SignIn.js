@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { AiFillEyeInvisible, AiFillEye } from 'react-icons/ai'
 import { Link, useNavigate } from 'react-router-dom';
 import OAuth from '../components/OAuth';
+import { signInWithEmailAndPassword, getAuth } from 'firebase/auth';
+import { toast } from 'react-toastify';
 
 const SignIn = () => {
    const navigate = useNavigate()
@@ -19,11 +21,21 @@ const SignIn = () => {
       setData(prevData => ({ ...prevData, [name]: value }))
    }
 
-   const handleSubmit = (e) => {
+   const handleSubmit = async (e) => {
       e.preventDefault()
 
-      navigate('/')
-      setData('')
+      try{
+         const auth = getAuth()
+         const userCredential = await signInWithEmailAndPassword(auth, data.email, data.password);
+         
+         if(userCredential.user){
+            navigate('/')
+            setData('')
+         } 
+      }
+      catch(err){
+         toast.error(`Bad user credentials`)
+      }
    }
 
    const handleClick = () => {
