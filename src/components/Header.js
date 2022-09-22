@@ -28,7 +28,7 @@ const Header = () => {
             <img src="https://static.rdc.moveaws.com/images/logos/rdc-logo-default.svg"  alt="logo" className='h-5 cursor-pointer' onClick={() => navigate('/')}/>
          </div>
          <div>
-            <ul className='flex space-x-10'>
+            <ul className='flex space-x-8'>
                   <li 
                   className={`py-3 cursor-pointer text-sm font-semibold text-gray-400 border-b-[3px] border-b-transparent ${pathMatchRoute('/') && 'text-black border-b-red-500'}`} onClick={() => navigate('/')}>Home</li>
          
